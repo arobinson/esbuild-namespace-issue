@@ -1,0 +1,33 @@
+{
+  "name": "namespace-issue",
+  "version": "1.0.0",
+  "description": "",
+  "main": "reproduce-issue.js",
+  "type": "module",
+  "scripts": {
+    "preinstall": "npx -y only-allow pnpm",
+    "build": "bazelisk build //:bundle",
+    "clean.build": "bazelisk clean && bazelisk build //:bundle",
+    "tsc.direct": "tsc --project tsconfig.json",
+    "esbuild.direct": "esbuild --bundle dist/out-tsc/reproduce-issue.js --outdir=dist/esbuild --platform=node esbuild.config.mjs",
+    "build.direct": "pnpm run tsc.direct && pnpm run esbuild.direct"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dragula": "3.7.3",
+    "messageformat": "2.3.0"
+  },
+  "devDependencies": {
+    "@angular/compiler": "13.1.1",
+    "@angular/compiler-cli": "13.1.1",
+    "@angular/core": "13.1.2",
+    "@babel/core": "^7.18.9",
+    "@bazel/bazelisk": "^1.12.0",
+    "@types/dragula": "^3.7.1",
+    "esbuild": "^0.14.51",
+    "reflect-metadata": "^0.1.13",
+    "typescript": "4.5.4"
+  }
+}

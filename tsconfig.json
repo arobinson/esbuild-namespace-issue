@@ -1,0 +1,44 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "declarationMap": true,
+    "declaration": true,
+    "resolveJsonModule": false,
+    "sourceMap": true,
+    "inlineSources": true,
+    "esModuleInterop": false,
+    "preserveSymlinks": false,
+    "target": "es2017",
+    "module": "ES2022",
+    "importHelpers": false,
+    "outDir": "./dist/out-tsc",
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "lib": ["ES2020", "dom"],
+    "removeComments": true,
+    "pretty": true,
+    "downlevelIteration": true,
+    "noImplicitReturns": true,
+    "strict": false,
+    "allowSyntheticDefaultImports": true,
+    "rootDir": ".",
+    // Needed to allow ngc within the Bazel sandbox to resolve relative paths:
+    "rootDirs": ["."],
+  },
+  "files": [
+    "reproduce-issue.ts"
+  ],
+  // If building without sand-boxing, we need to prevent TypeScript from descending into
+  // Bazel's external folder which contains third-party Bazel dependencies.
+  "exclude": ["node_modules/*", "external/*"],
+  "angularCompilerOptions": {
+    "generateCodeForLibraries": true,
+    "entryModule": "src/app/app.module#AppModule",
+    "enableIvy": true,
+    "allowEmptyCodegenFiles": true,
+    "strictInputAccessModifiers": false,
+    "strictTemplates": false,
+    "fullTemplateTypeCheck": false
+  }
+}

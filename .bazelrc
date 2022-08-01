@@ -1,0 +1,16 @@
+### Build settings
+# Setup an environment variable to be able to check running in the CLI versus in Bazel
+build --action_env=RUNNING_IN_BAZEL=1
+build --show_timestamps
+# This experimental flag saves time in creation of the sandbox directories by reusing them between different NGC jobs
+build --experimental_reuse_sandbox_directories
+# Prevent changing files while a build is in progress (stops remote cache corruption)
+build --experimental_guard_against_concurrent_changes
+
+
+### Run settings
+# Setup an environment variable to be able to check running in the CLI versus in Bazel
+run --action_env=RUNNING_IN_BAZEL=1
+
+
+### Test settings

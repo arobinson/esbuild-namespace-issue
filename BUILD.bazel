@@ -1,0 +1,74 @@
+load("//:esbuild_patched.bzl", "esbuild")
+load("@aspect_rules_ts//ts:defs.bzl", "ts_config", "ts_project")
+load("@aspect_bazel_lib//lib:directory_path.bzl", "directory_path")
+load("@aspect_rules_js//js:defs.bzl", "js_binary")
+load("@npm//:defs.bzl", "npm_link_all_packages")
+
+npm_link_all_packages(name = "node_modules")
+
+directory_path(
+    name = "ngc_entrypoint",
+    directory = "//:node_modules/@angular/compiler-cli/dir",
+    path = "bundles/src/bin/ngc.js",
+)
+
+js_binary(
+    name = "ngc",
+    data = ["//:node_modules/@angular/compiler-cli"],
+    entry_point = ":ngc_entrypoint",
+    visibility = ["//visibility:public"],
+)
+
+ts_config(
+    name = "tsconfig",
+    src = "tsconfig.bazel.json",
+    deps = [
+        ":tsconfig.bazel.json",
+    ],
+)
+
+ts_project(
+    name = "tsc",
+    srcs = [
+        "example-decorator.ts",
+        "reproduce-issue.ts",
+    ],
+    declaration = True,
+    declaration_map = True,
+    source_map = True,
+    supports_workers = False,
+    tsc = "//:ngc",
+    tsconfig = "tsconfig",
+    deps = [
+        "//:node_modules/@angular/compiler",
+        "//:node_modules/@angular/compiler-cli",
+        "//:node_modules/@angular/core",
+        "//:node_modules/@types/dragula",
+        "//:node_modules/dragula",
+        "//:node_modules/messageformat",
+        "//:node_modules/reflect-metadata",
+    ],
+)
+
+esbuild(
+    name = "bundle",
+    srcs = [
+        ":tsc",
+    ],
+    #output = "example.js",
+    config = ":esbuild.config.mjs",
+    entry_points = [
+        ":reproduce-issue.ts",
+    ],
+    format = "esm",
+    metafile = True,
+    output_dir = True,
+    sourcemap = "",
+    splitting = True,
+    deps = [
+        ":tsc",
+        "//:node_modules/@types/dragula",
+        "//:node_modules/dragula",
+        "//:node_modules/messageformat",
+    ],
+)
